@@ -5,12 +5,19 @@ export const Pagination = () => {
 
     const [data, setData] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const usersPerPage=10;
     const pageVisited= pageNumber*usersPerPage;
 
     const displayUsers=data.slice(pageVisited,pageVisited+usersPerPage)
-    .map((user,index) =>{
+    .filter((user,index) =>{
+        if(searchTerm==""){
+            return user;
+        }else if(user.title.toLowerCase().includes(searchTerm.toLowerCase())){
+            return user;
+        }
+    }).map((user,index) =>{
         return(
             <div className="Users">
             <li key={index}>{user.title}</li>
@@ -32,6 +39,12 @@ export const Pagination = () => {
 
     return (
         <div className="App">
+            <input 
+            type="text"
+            placeholder="Search..."
+            onChange={(event)=>{
+                setSearchTerm(event.target.value);
+            }}/>
             {displayUsers}
             <ReactPaginate
             previousLabel={"Previous"}
